@@ -147,7 +147,9 @@
   if (mode === 'strip') {
     root.className = 'strip';
     var link = web ? 'index.html' : toSection();
-    root.innerHTML =
+    // data-separator="top" draws a GoodBarber-style separator above the strip (the home page is at its widget limit).
+    var sep = root.getAttribute('data-separator') === 'top' ? '<div class="sep"><i></i></div>' : '';
+    root.innerHTML = sep +
       '<a class="sh" href="' + link + '"><span class="t serif">Albums</span><span class="s">See all ›</span></a>' +
       '<div class="row4">' + ALBUMS.map(function (a) {
         return '<a href="' + link + '"><img src="' + BASE + 'covers/' + a.id + '.jpg" alt=""><span>' + esc(a.title) + '</span></a>';
