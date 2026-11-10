@@ -60,7 +60,7 @@
     '#aa-books .sh{display:flex;justify-content:space-between;align-items:center;padding:0 12px;height:48px;flex:none}',
     '#aa-books .sh .t{font-size:24px;color:#333}',
     '#aa-books .sh .s{font-size:14px;font-weight:600;color:var(--gold)}',
-    '#aa-books .row{display:flex;gap:12px;overflow-x:auto;padding:2px 12px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}',
+    '#aa-books .row{display:flex;gap:12px;overflow-x:auto;padding:2px 12px 10px;scroll-padding:0 12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}',
     '#aa-books .row::-webkit-scrollbar{display:none}',
     '#aa-books .row a{flex:none;width:100px;scroll-snap-align:start}',
     '#aa-books .row span{display:block;font-size:11.5px;line-height:1.25;margin-top:7px;text-align:center;color:#333;height:2.5em;overflow:hidden}'
