@@ -7,7 +7,24 @@
  */
 (function () {
   var BASE = 'https://aneelaranha.github.io/just-saying/music/';
+  var APP = 'https://apps.aneelaranha.com/songs-1/i/';
   var yt = function (id) { return 'https://www.youtube.com/watch?v=' + id; };
+
+  // Worship video pages inside the app (Songs (Videos) section), keyed by track title.
+  // Tracks listed here open in the app; tracks with only a YouTube id open YouTube.
+  var IN_APP = {
+    'Walking on Water': '96958880/video-1213', 'Let Your Light Shine': '97172299/video-1215',
+    'Like a Child': '97452575/video-1217', 'Now I See': '98239331/video-1223',
+    'The Sower and the Seed': '96373651/video-1208', 'The Talents': '98239312/video-1222',
+    'The Wise and the Foolish Builders': '97467603/video-1218', 'Consider the Lilies': '96686848/video-1211',
+    'The Good Samaritan': '98239343/good-samaritan', 'Keep on Knocking': '97608043/video-1219',
+    'Wake Up, My Soul': '95101610/video-1202', 'I Give You Thanks': '95304870/video-1203',
+    'Lead Me': '96258381/video-1207', 'Holy Spirit, Fall on Me': '96598547/video-1210',
+    'Psalm 139': '96776481/video-1212', 'Blessed': '96053329/video-1205',
+    'In My Name': '98239426/video-1225', 'Eyes of Love': '98239279/video-1221',
+    'I Love You': '97055442/i-love-you', 'I Know How Jesus Felt': '81795683/i-know-how-jesus-felt',
+    'Homeward Bound': '95058079/video-1201', 'The Blessed Lamb of God': '96485347/video-1209'
+  };
 
   var ALBUMS = [
     {
@@ -54,7 +71,7 @@
       tracks: [
         ['In My Name', 'YpXUF6ztXjE'], ['Eyes of Love', '-fFzu7o1NjU'], ['The Warmth of His Embrace'],
         ['One Thing', 'JDRyPHYwfUg'], ['David’s Song', 'E21YwJdO0fI'], ['I Love You', 'P_iujVMqiQw'],
-        ['Peace', 'CkJk485roVE'], ['I Know How Jesus Felt'], ['The Spirit’s Embrace'], ['Awesome God'],
+        ['Peace', 'CkJk485roVE'], ['I Know How Jesus Felt', 'app'], ['The Spirit’s Embrace'], ['Awesome God'],
         ['Homeward Bound', 'w9_t7UPDbRk'], ['The Blessed Lamb of God', '7sR0U1YIhvo']
       ]
     }
@@ -155,8 +172,15 @@
       '</div>' +
       '<ol class="tracks">' + a.tracks.map(function (t, i) {
         var inner = '<span class="num">' + (i + 1) + '</span><span class="name">' + esc(t[0]) + '</span>';
+        var watch = '<span class="watch">Watch' + ICON.play + '</span>';
+        var page = IN_APP[t[0]];
+        if (page) {
+          // A plain link to the app's own domain opens that page inside the app.
+          var href = APP + page;
+          return '<li><a class="row" href="' + (web ? esc(href) + '" target="_blank" rel="noopener' : esc(href)) + '">' + inner + watch + '</a></li>';
+        }
         return t[1]
-          ? '<li><a class="row" href="' + ext(yt(t[1])) + '">' + inner + '<span class="watch">Watch' + ICON.play + '</span></a></li>'
+          ? '<li><a class="row" href="' + ext(yt(t[1])) + '">' + inner + watch + '</a></li>'
           : '<li><div class="row">' + inner + '</div></li>';
       }).join('') + '</ol>' +
       (a.playlist ? '<a class="playlist" href="' + ext(a.playlist) + '">Watch the full album on YouTube ›</a>' : '') +
