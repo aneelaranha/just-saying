@@ -2,7 +2,7 @@
 """Prepares the Just Saying image collection for the app.
 
 Reads the daily images from ~/🌅 Gallery/Just Saying <year>/, makes a web copy
-(1024px) and a thumbnail (360px) of every image dated today or earlier, and
+(1024px) and a thumbnail (540px) of every image dated today or earlier, and
 writes collection/images.json (newest first). Images dated after today are left
 out until their day. Safe to run any number of times.
 Usage: python3 -I build_collection.py [year ...]   (default: the current year)
@@ -67,7 +67,7 @@ def main():
                 continue
             try:
                 new = make(src, os.path.join(OUT, "img", key + ".jpg"), 1024, 80)
-                make(src, os.path.join(OUT, "thumb", key + ".jpg"), 360, 72)
+                make(src, os.path.join(OUT, "thumb", key + ".jpg"), 540, 74)
                 if new:
                     added.append(key)
                 listed.append(key)

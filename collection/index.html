@@ -9,8 +9,11 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--bg); color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; -webkit-text-size-adjust: 100%; }
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; }
-  @media (min-width: 700px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+  .feature { all: unset; display: block; padding: 4px 4px 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .feature img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #f6f4ef; }
+  .feature[hidden] { display: none; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; padding: 4px; }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(3, 1fr); } }
   .grid button { all: unset; display: block; aspect-ratio: 1; background: #f6f4ef; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 28px; }
@@ -38,6 +41,7 @@
 </style>
 </head>
 <body>
+<button class="feature" id="feature" aria-label="Open today's Just Saying" hidden><img id="featureImg" alt=""></button>
 <div class="grid" id="grid"></div>
 <div class="pager" id="pager">
   <button id="prev" aria-label="Previous page"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Previous</button>
@@ -63,17 +67,21 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   var d = new Date(), today = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
-  function pages() { return Math.max(1, Math.ceil(list.length / PER)); }
+  // The newest image is shown large at the top of page 1; the grid pages hold 50 each after it.
+  function pages() { return Math.max(1, Math.ceil((list.length - 1) / PER)); }
+  function pageOf(i) { return i <= 0 ? 0 : Math.floor((i - 1) / PER); }
 
   function render() {
-    var start = page * PER, items = list.slice(start, start + PER), g = $('grid');
+    var start = 1 + page * PER, items = list.slice(start, start + PER), g = $('grid');
     g.innerHTML = '';
     if (!list.length) { g.outerHTML = '<div class="empty">No images yet.</div>'; return; }
+    $('feature').hidden = page !== 0;
+    if (page === 0) $('featureImg').src = 'img/' + list[0] + '.jpg';
     items.forEach(function (id, i) {
       var b = document.createElement('button');
       b.setAttribute('aria-label', 'Open image');
       var im = document.createElement('img');
-      im.src = 'thumb/' + id + '.jpg'; im.alt = ''; im.loading = i < 12 ? 'eager' : 'lazy'; im.decoding = 'async';
+      im.src = 'thumb/' + id + '.jpg'; im.alt = ''; im.loading = i < 6 ? 'eager' : 'lazy'; im.decoding = 'async';
       b.appendChild(im);
       b.onclick = function () { open(start + i); };
       g.appendChild(b);
@@ -100,8 +108,9 @@
   function open(i) { show(i); $('viewer').classList.add('open'); document.body.style.overflow = 'hidden'; }
   function close() {
     $('viewer').classList.remove('open'); document.body.style.overflow = '';
-    var p = Math.floor(cur / PER); if (p !== page) go(p);
+    var p = pageOf(cur); if (p !== page) go(p);
   }
+  $('feature').onclick = function () { open(0); };
   function step(n) { var j = cur + n; if (j >= 0 && j < list.length) show(j); }
   $('close').onclick = close;
   $('vprev').onclick = function () { step(-1); };

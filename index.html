@@ -7,7 +7,7 @@
 <style>
   html, body { margin: 0; padding: 0; background: #fff; }
   html, body { height: 100%; overflow: hidden; }
-  .frame { position: relative; width: 100%; height: 100%; overflow: hidden; background: #fff; }
+  .frame { position: relative; width: 100%; height: 100%; overflow: hidden; background: #fff; cursor: pointer; }
   video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
   .btn {
     position: absolute; bottom: 12px; width: 40px; height: 40px; border: 0; border-radius: 50%;
@@ -60,6 +60,11 @@
     if (!v.muted) { v.currentTime = 0; v.play(); }
     ico.innerHTML = v.muted ? off : on;
     sound.setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Turn sound off');
+  });
+
+  // Tapping the animation asks the app's widget to open the Just Saying image collection.
+  document.getElementById('frame').addEventListener('click', function () {
+    try { window.parent.postMessage('open-just-saying-collection', '*'); } catch (e) {}
   });
 
   var share = document.getElementById('share');
