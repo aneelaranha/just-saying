@@ -36,6 +36,9 @@ done
 
 cd "$REPO" || exit 1
 ./update_list.sh
+
+# Image collection: publish each day's square Just Saying image on its day.
+python3 -I "$REPO/build_collection.py" || { echo "ERROR building the image collection"; errors=$((errors + 1)); }
 latest=$(ls videos/*.mp4 | tail -1 | sed -E 's#videos/(.*)\.mp4#\1#')
 today=$(date +%F)
 if [[ "$latest" < "$today" ]]; then echo "MISSING: no reel for $today yet (app is showing $latest)"; fi
@@ -43,7 +46,7 @@ if [[ "$latest" < "$today" ]]; then echo "MISSING: no reel for $today yet (app i
 if [[ -n "$(git status --porcelain)" ]]; then
   git add -A
   git -c user.name="Aneel Aranha" -c user.email="aneelaranha@users.noreply.github.com" \
-    commit -q -m "Add Just Saying reels ($added new)" && git push -q && echo "PUBLISHED $added new reel(s)" \
+    commit -q -m "Daily Just Saying update ($added new reels)" && git push -q && echo "PUBLISHED $added new reel(s)" \
     || { echo "ERROR pushing to GitHub"; errors=$((errors + 1)); }
 else
   echo "No new reels. Latest in the app: $latest"
