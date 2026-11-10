@@ -126,6 +126,8 @@
     '#aa-music .playlist{display:block;text-align:center;color:var(--gold);font-weight:600;font-size:14px;padding:6px 0 10px}',
     /* home strip */
     '#aa-music.strip{height:100%;display:flex;flex-direction:column}',
+    /* Matches GoodBarber's Separator widget: 78px band, 1px #ddd line across the middle */
+    '#aa-music .sep{height:78px;flex:none;display:flex;align-items:center}#aa-music .sep i{display:block;width:100%;border-top:1px solid #ddd}',
     '#aa-music .sh{display:flex;justify-content:space-between;align-items:center;padding:0 12px;height:48px;flex:none}',
     '#aa-music .sh .t{font-size:24px;color:#333}',
     '#aa-music .sh .s{font-size:14px;font-weight:600;color:var(--gold)}',
