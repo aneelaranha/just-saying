@@ -129,7 +129,7 @@
     root.className = 'strip';
     var link = web ? 'index.html' : toSection();
     root.innerHTML =
-      '<a class="sh" href="' + link + '"><span class="t serif">Music</span><span class="s">See all ›</span></a>' +
+      '<a class="sh" href="' + link + '"><span class="t serif">Albums</span><span class="s">See all ›</span></a>' +
       '<div class="row4">' + ALBUMS.map(function (a) {
         return '<a href="' + link + '"><img src="' + BASE + 'covers/' + a.id + '.jpg" alt=""><span>' + esc(a.title) + '</span></a>';
       }).join('') + '</div>';
