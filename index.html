@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Just Saying Today</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #fff; }
+  .frame { position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: #fff; }
+  video, img.poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .btn {
+    position: absolute; bottom: 12px; width: 40px; height: 40px; border: 0; border-radius: 50%;
+    background: rgba(0,0,0,.45); color: #fff; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; -webkit-tap-highlight-color: transparent; padding: 0;
+  }
+  .btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  #sound { right: 12px; }
+  #share { right: 60px; display: none; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <video id="v" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
+  <button class="btn" id="share" aria-label="Share">
+    <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+  </button>
+  <button class="btn" id="sound" aria-label="Turn sound on">
+    <svg id="ico" viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+  </button>
+</div>
+<script>
+(function () {
+  var v = document.getElementById('v');
+  var now = new Date();
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  var today = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+
+  // Viewer's own date: show today's file, or the most recent one before it.
+  fetch('videos.json?d=' + today, { cache: 'no-store' })
+    .then(function (r) { return r.json(); })
+    .then(function (list) {
+      list.sort();
+      var pick = null;
+      for (var i = 0; i < list.length; i++) if (list[i] <= today) pick = list[i];
+      if (!pick) pick = list[0];
+      v.poster = 'videos/' + pick + '.jpg';
+      v.src = 'videos/' + pick + '.mp4';
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+      window.__pick = pick;
+    })
+    .catch(function () {});
+
+  var on = '<path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>';
+  var off = '<path d="M11 5L6 9H3v6h3l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/>';
+  var sound = document.getElementById('sound'), ico = document.getElementById('ico');
+  sound.addEventListener('click', function (e) {
+    e.stopPropagation();
+    v.muted = !v.muted;
+    if (!v.muted) { v.currentTime = 0; v.play(); }
+    ico.innerHTML = v.muted ? off : on;
+    sound.setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Turn sound off');
+  });
+
+  var share = document.getElementById('share');
+  if (navigator.share) {
+    share.style.display = 'flex';
+    share.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var url = location.href.split('?')[0].replace(/index\.html$/, '') + 'videos/' + (window.__pick || '') + '.mp4';
+      navigator.share({ title: 'Just Saying', text: 'Just Saying, from Aneel Aranha', url: url }).catch(function () {});
+    });
+  }
+})();
+</script>
+</body>
+</html>
