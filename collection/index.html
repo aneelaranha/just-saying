@@ -89,7 +89,10 @@
 
   function show(i) {
     cur = i;
-    $('big').src = 'img/' + list[i] + '.jpg';
+    var id = list[i], full = new Image();
+    $('big').src = 'thumb/' + id + '.jpg';
+    full.onload = function () { if (list[cur] === id) $('big').src = full.src; };
+    full.src = 'img/' + id + '.jpg';
     $('vprev').disabled = i <= 0;
     $('vnext').disabled = i >= list.length - 1;
     [i - 1, i + 1].forEach(function (j) { if (j >= 0 && j < list.length) new Image().src = 'img/' + list[j] + '.jpg'; });
