@@ -1,13 +1,13 @@
 /* Prayer Requests section for the Aneel Aranha app (Stage 1).
  * Loaded by a GoodBarber Custom Code section with:
- *   <div id="aa-prayer" data-api="https://PRAYER-API-URL"></div>
+ *   <div id="aa-prayer"></div>
  *   <script src="https://aneelaranha.github.io/just-saying/prayer/prayer.js"></script>
  * data-links="web" switches links to plain new-tab links (for testing in a browser).
  */
 (function () {
   var root = document.getElementById('aa-prayer');
   if (!root) return;
-  var API = (root.getAttribute('data-api') || '').replace(/\/$/, '');
+  var API = (root.getAttribute('data-api') || 'https://prayer-api.prayer-api.workers.dev').replace(/\/$/, '');
   var web = root.getAttribute('data-links') === 'web';
 
   var HOP = {
