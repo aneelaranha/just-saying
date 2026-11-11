@@ -9,6 +9,11 @@
   if (!root) return;
   var API = (root.getAttribute('data-api') || 'https://prayer-api.prayer-api.workers.dev').replace(/\/$/, '');
   var web = root.getAttribute('data-links') === 'web';
+  // data-mode="home": the same form, compact, for a Home page widget (the reply scrolls inside the widget).
+  // data-separator="top": draws a GoodBarber-style separator above it.
+  var home = root.getAttribute('data-mode') === 'home';
+  var sepTop = root.getAttribute('data-separator') === 'top' ? '<div class="sep"><i></i></div>' : '';
+  if (home) root.className = 'home';
 
   var HOP = {
     zoom: 'https://aanet.click/wedhope',
@@ -90,7 +95,20 @@
     '#aa-prayer .wa svg{width:30px;height:30px;flex:none;color:#1fa855}',
     '#aa-prayer .wa b{display:block;font-size:15px;color:#145c32}',
     '#aa-prayer .wa span{font-size:13px;color:#3d6b51}',
-    '#aa-prayer .again{display:block;text-align:center;color:var(--gold);font-weight:600;margin-top:22px;font-size:15px}'
+    '#aa-prayer .again{display:block;text-align:center;color:var(--gold);font-weight:600;margin-top:22px;font-size:15px}',
+    /* Matches GoodBarber's Separator widget: 78px band, 1px #ddd line across the middle */
+    '#aa-prayer .sep{height:78px;display:flex;align-items:center;margin:0 -16px}#aa-prayer .sep i{display:block;width:100%;border-top:1px solid #ddd}',
+    /* home widget */
+    '#aa-prayer.home{padding-bottom:16px}',
+    '#aa-prayer.home h1{font-size:24px;margin:4px 0 6px}',
+    '#aa-prayer.home .lead{font-size:14.5px;margin-bottom:4px}',
+    '#aa-prayer.home label{margin-top:12px}',
+    '#aa-prayer.home textarea{min-height:110px}',
+    '#aa-prayer.home .btn{margin-top:16px}',
+    '#aa-prayer.home .invite{margin-top:20px;padding:18px 14px}',
+    '#aa-prayer.home .invite h2{font-size:21px;margin:4px 0 2px}',
+    '#aa-prayer.home .invite .when{margin-top:8px}',
+    '#aa-prayer.home .wait{padding:40px 10px}'
   ].join('');
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
@@ -136,9 +154,9 @@
     return '<section class="invite">' +
       (s.live ? '<span class="live">LIVE NOW</span>' : '<div class="k">Every Wednesday on Zoom</div>') +
       '<h2>House of Prayer</h2>' +
-      '<p>' + (afterRequest
+      (home && !afterRequest ? '' : '<p>' + (afterRequest
         ? 'Your request will be lifted up at our next House of Prayer. Come and pray with us. You do not have to carry this alone.'
-        : 'Join Aneel Aranha and intercessors from around the world as we pray for every request we receive.') + '</p>' +
+        : 'Join Aneel Aranha and intercessors from around the world as we pray for every request we receive.') + '</p>') +
       '<div class="when">' + esc(when) + (s.live ? '' : ' <span style="font-weight:400;color:#a9a090">(your time)</span>') + '</div>' +
       '<div class="dubai">Wednesdays, 7:30 pm Dubai time</div>' +
       '<a class="btn" href="' + ext(HOP.zoom) + '">' + ICON.video + (s.live ? 'Join now on Zoom' : 'Join on Zoom') + '</a>' +
@@ -152,9 +170,11 @@
   var draft = { name: '', place: '', email: '', category: '', text: '' };
 
   function showForm(error) {
-    root.innerHTML =
+    root.innerHTML = sepTop +
       '<h1>Prayer Requests</h1>' +
-      '<p class="lead">Share what is on your heart. You will receive a word from Scripture right away, and we will pray for you at our Wednesday House of Prayer.</p>' +
+      '<p class="lead">' + (home
+        ? 'Share what is on your heart. You will receive a word from Scripture right away.'
+        : 'Share what is on your heart. You will receive a word from Scripture right away, and we will pray for you at our Wednesday House of Prayer.') + '</p>' +
       '<form novalidate>' +
       '<label>What would you like prayer for?</label>' +
       '<div class="chips">' + CATEGORIES.map(function (c) {
@@ -192,14 +212,22 @@
     });
   }
 
+  // In the Home widget the code has its own scrolling frame, so go to its top; in the section, bring the form into view.
+  function toTop() {
+    try {
+      if (home) { window.scrollTo(0, 0); if (document.scrollingElement) document.scrollingElement.scrollTop = 0; }
+      else root.scrollIntoView({ block: 'start' });
+    } catch (e) {}
+  }
+
   function showWaiting() {
-    root.innerHTML = '<div class="wait"><div class="dove"></div><p>Searching the Scriptures for you…</p><small>This takes a few seconds.</small></div>';
-    try { root.scrollIntoView({ block: 'start' }); } catch (e) {}
+    root.innerHTML = sepTop + '<div class="wait"><div class="dove"></div><p>Searching the Scriptures for you…</p><small>This takes a few seconds.</small></div>';
+    toTop();
   }
 
   function showReply(r) {
     var first = draft.name ? esc(draft.name.split(' ')[0]) : '';
-    root.innerHTML =
+    root.innerHTML = sepTop +
       (r.help ? '<div class="help"><b>' + (first ? first + ', your' : 'Your') + ' life matters to God.</b>' + esc(r.help) + '</div>' : '') +
       '<p class="opening">' + esc(r.opening) + '</p>' +
       '<h3>God\'s Word for you</h3>' +
@@ -216,9 +244,9 @@
       e.preventDefault();
       draft = { name: draft.name, place: draft.place, email: draft.email, category: '', text: '' };
       showForm();
-      try { root.scrollIntoView({ block: 'start' }); } catch (x) {}
+      toTop();
     });
-    try { root.scrollIntoView({ block: 'start' }); } catch (e) {}
+    toTop();
   }
 
   function send(honeypot) {
