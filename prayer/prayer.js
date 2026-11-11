@@ -96,8 +96,8 @@
     '#aa-prayer .wa b{display:block;font-size:15px;color:#145c32}',
     '#aa-prayer .wa span{font-size:13px;color:#3d6b51}',
     '#aa-prayer .again{display:block;text-align:center;color:var(--gold);font-weight:600;margin-top:22px;font-size:15px}',
-    /* 1px #ddd line like GoodBarber's Separator widget, spaced to match the 24px gaps around the other Home separators */
-    '#aa-prayer .sep{padding:12px 0 18px;margin:0 -16px}#aa-prayer .sep i{display:block;width:100%;border-top:1px solid #ddd}',
+    /* 1px #ddd line like GoodBarber's Separator widget, with 25px of clear space on each side like every Home separator */
+    '#aa-prayer .sep{padding:10px 0 15px;margin:0 -16px}#aa-prayer .sep i{display:block;width:100%;border-top:1px solid #ddd}',
     /* home widget */
     '#aa-prayer.home{padding-bottom:16px}',
     '#aa-prayer.home h1{font-size:24px;margin:4px 0 6px}',

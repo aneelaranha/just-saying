@@ -126,9 +126,9 @@
     '#aa-music .playlist{display:block;text-align:center;color:var(--gold);font-weight:600;font-size:14px;padding:6px 0 10px}',
     /* home strip */
     '#aa-music.strip{height:100%;display:flex;flex-direction:column}',
-    /* 1px #ddd line like GoodBarber's Separator widget. 19px above + the list's own 5px below its last item = 24px;
-       10px below + the 14px from the top of the header to the "Albums" text = 24px, so the gap matches every Home separator. */
-    '#aa-music .sep{flex:none;padding:19px 0 10px}#aa-music .sep i{display:block;width:100%;border-top:1px solid #ddd}',
+    /* 1px #ddd line like GoodBarber's Separator widget, with 25px of clear space on each side like every Home separator
+       (15px + the list's own space above; 11px + the header's own space above the "Albums" text). */
+    '#aa-music .sep{flex:none;padding:15px 0 11px}#aa-music .sep i{display:block;width:100%;border-top:1px solid #ddd}',
     '#aa-music .sh{display:flex;justify-content:space-between;align-items:center;padding:0 12px;height:48px;flex:none}',
     '#aa-music .sh .t{font-size:24px;color:#333}',
     '#aa-music .sh .s{font-size:14px;font-weight:600;color:var(--gold)}',
