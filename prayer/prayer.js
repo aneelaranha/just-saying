@@ -150,7 +150,6 @@
   function invite(afterRequest) {
     var s = sessionInfo();
     var when = s.live ? 'Happening now' : dayWord(s.start) + ' at ' + localTime(s.start);
-    var calUrl = isApple() && API ? API + '/hop.ics' : gcal(s);
     return '<section class="invite">' +
       (s.live ? '<span class="live">LIVE NOW</span>' : '<div class="k">Every Wednesday on Zoom</div>') +
       '<h2>House of Prayer</h2>' +
@@ -158,10 +157,7 @@
         ? 'Your request will be lifted up at our next House of Prayer. Come and pray with us. You do not have to carry this alone.'
         : 'Join Aneel Aranha and intercessors from around the world as we pray for every request we receive.') + '</p>') +
       '<div class="when">' + esc(when) + (s.live ? '' : ' <span style="font-weight:400;color:#a9a090">(your time)</span>') + '</div>' +
-      '<div class="dubai">Wednesdays, 7:30 pm Dubai time</div>' +
-      '<a class="btn" href="' + ext(HOP.zoom) + '">' + ICON.video + (s.live ? 'Join now on Zoom' : 'Join on Zoom') + '</a>' +
-      '<div class="row"><a class="btn" href="' + ext(calUrl) + '">' + ICON.cal + 'Add to calendar</a>' +
-      '<a class="btn" href="' + ext(HOP.whatsapp) + '">' + ICON.wa + 'WhatsApp group</a></div>' +
+      '<a class="btn" href="' + ext(HOP.whatsapp) + '">' + ICON.wa + 'Join our WhatsApp group</a>' +
       '<div class="ids"><span>Meeting ID <b>' + HOP.meetingId + '</b></span><span>Passcode <b>' + HOP.passcode + '</b></span></div>' +
       '</section>';
   }
