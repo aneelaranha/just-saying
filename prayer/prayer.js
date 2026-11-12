@@ -19,7 +19,7 @@
     zoom: 'https://aanet.click/wedhope',
     meetingId: '850 3864 0207',
     passcode: '933722',
-    whatsapp: 'https://aanet.click/hopgroup',
+    whatsapp: 'https://chat.whatsapp.com/Kf7PdhXcnRr3QMdQ5rBo9Q',
     utcHour: 15, utcMin: 30, minutes: 60 // Wednesdays 7:30 pm Dubai
   };
   var CATEGORIES = ['Healing', 'Family', 'Finances & work', 'Guidance', 'Salvation of a loved one',
@@ -187,7 +187,7 @@
       '<input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">' +
       '<button class="btn" type="submit">Send my prayer request</button>' +
       (error ? '<div class="err">' + esc(error) + '</div>' : '') +
-      '<p class="note">Your request is private. Only Aneel Aranha and the House of Prayer team will read it. The Scripture reply you receive is prepared with the help of AI.</p>' +
+      '<p class="note">Your request is private. Only Aneel Aranha and the House of Prayer team will read it.</p>' +
       '</form>' + invite(false);
 
     var form = root.querySelector('form');
